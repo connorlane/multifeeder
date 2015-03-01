@@ -8,6 +8,7 @@ import time
 import threading
 import atexit
 import signal
+import sys
 
 DATA_DIRECTORY = '/srv/multifeeder_server'
 
@@ -134,13 +135,19 @@ class index:
 		return render.index()
 
 def setDefaults():
+	rs485Lock.acquire()	
 	for heater in bus.heaters:
-		heater.onOff = False
 		heater.setPointValue = 0.0
+		heater.onOff = False
 	
 	for servo in bus.servos:
 		servo.speedCommand = 0.0
 		servo.onOff = False
+	rs485Lock.release()
+
+def sig_term_handler(signal, frame):
+	cleanup_cleanup_everybody_do_your_share()
+	sys.exit(0)
 
 @atexit.register
 def cleanup_cleanup_everybody_do_your_share():
@@ -149,7 +156,7 @@ def cleanup_cleanup_everybody_do_your_share():
 	setDefaults()
 
 if __name__ == "__main__":
-	signal.signal(signal.SIGTERM, cleanup_cleanup_everybody_do_your_share)
+	signal.signal(signal.SIGTERM, sig_term_handler)
 
 	setDefaults()	
 
