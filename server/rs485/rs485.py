@@ -22,8 +22,8 @@ def setupRS485(ser, txEnablePin):
 	# RE/DE signal will be inverted, i.e. low while transmitting
 	 
 	# The GPIO pin to use, using the Kernel numbering: 
-	RS485_RTS_GPIO_PIN = txEnablePin # GPIO1_16 -> GPIO(1)_(16) = (1)*32+(16) = 48
-	 
+	RS485_RTS_GPIO_PIN = txEnablePin 	 
+
 	# Pack the config into 8 consecutive unsigned 32-bit values:
 	# (per  struct serial_rs485 in patched serial.h)
 	serial_rs485 = struct.pack('IIIIIIII', 

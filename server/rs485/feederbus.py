@@ -13,5 +13,6 @@ class Feederbus ( object ):
 		for heater in self.heaters:
 			heater.debug = True			
 
-		rs485.setupRS485(self.heaters[0].serial, 48)
+		rs485.setupRS485(self.heaters[0].serial, 48) # GPIO1_16 -> GPIO(1)_(16) = (1)*32+(16) = 48
+
 
