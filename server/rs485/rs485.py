@@ -1,13 +1,14 @@
-import serial, fcntl, struct, time
- 
-ser = serial.Serial(
-    port='/dev/ttyO1', 
-    baudrate=9600, 
-    timeout=1,
-    parity=serial.PARITY_NONE,
-    stopbits=serial.STOPBITS_ONE,
-    bytesize=serial.EIGHTBITS
-)
+import serial, fcntl, struct, time, minimalmodbus
+
+heater1 = minimalmodbus.Instrument('/dev/ttyO1', 4)
+heater1.mode = minimalmodbus.MODE_ASCII
+heater1.debug = True
+
+heater1.serial.baudrate = 9600
+heater1.serial.timeout = 1
+heater1.serial.parity = serial.PARITY_EVEN
+heater1.serial.stopbits = serial.STOPBITS_ONE
+heater1.serial.bytesize = serial.SEVENBITS
  
 # Standard Linux RS485 ioctl:
 TIOCSRS485 = 0x542F
@@ -43,14 +44,10 @@ serial_rs485 = struct.pack('IIIIIIII',
                            )
  
 # Apply the ioctl to the open ttyO4 file descriptor:
-fd=ser.fileno()
+fd=heater1.serial.fileno()
 fcntl.ioctl(fd, TIOCSRS485, serial_rs485)
+
+print heater1.write_register(0x1001, 1400)
+print heater1.write_bit(0x814, 0)
+
  
-# Send some bytes:
-# GPIO1_16 should be low here
-time.sleep(0.2)
-# GPIO1_16 should be high while this is being transmitted:
-ser.write("Hello, world!")
-# GPIO1_16 should be low again after transmitting
-time.sleep(0.2)
-ser.close()
