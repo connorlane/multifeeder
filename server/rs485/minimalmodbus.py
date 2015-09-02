@@ -51,7 +51,7 @@ _ASCII_HEADER = ':'
 _ASCII_FOOTER = '\r\n'
 
 # Several instrument instances can share the same serialport
-_SERIALPORTS = {}
+_SERIALPORTS = []
 _LATEST_READ_TIMES = {}
 
 ####################
@@ -100,9 +100,7 @@ class Instrument():
 
     def __init__(self, serialport, slaveaddress, mode=MODE_RTU):
         self.serial = serialport
-		  if not _SERIALPORTS:
-            _SERIALPORTS = []
-        if port not in _SERIALPORTS:
+        if serialport not in _SERIALPORTS:
             _SERIALPORTS.append(serialport)
 
         """The serial port object as defined by the pySerial module. Created by the constructor.

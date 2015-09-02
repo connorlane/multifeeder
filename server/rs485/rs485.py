@@ -1,7 +1,7 @@
 import serial, fcntl, struct
 
 class RS485 (serial.Serial, object):
-	def __init__(self, txEnablePin, port=None, baudrate=19200, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=None, xonxoff=False, writeTimeout=None):
+	def __init__(self, txEnablePin, port=None, baudrate=19200, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=1, xonxoff=False, writeTimeout=None):
 		serial.Serial.__init__(self, port, baudrate, bytesize, parity, stopbits, timeout, xonxoff, writeTimeout)
 
 		# Standard Linux RS485 ioctl:

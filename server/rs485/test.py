@@ -1,5 +1,10 @@
-import rs485
+import rs485, minimalmodbus, feederbus
 
-r = rs485.RS485(48, '/dev/ttyO1')
+bus = feederbus.Feederbus('/dev/ttyO1')
 
-r.write("Hello, World!")
+try:
+	bus.heaters[0].setPointValue = 300
+except:
+	pass
+
+bus.heaters[1].setPointValue = 20
