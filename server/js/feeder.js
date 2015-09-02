@@ -181,9 +181,11 @@
 					feeder1_gauge.refresh(data.wheel1);
 					feeder2_gauge.refresh(data.wheel2);
 					feeder3_gauge.refresh(data.wheel3);
+					hideCommError();
 				}, 
 			dataType: "json", 
-			timeout: interval 
+			timeout: interval,
+			error: showCommError
 		});
 	}, interval);
 
@@ -194,12 +196,51 @@
         customLayout: {
             'default': ['7 8 9', '4 5 6', '1 2 3', '0 . {b}', '{accept} {cancel}']
         },
-		  restrictInput: true
-    });
+		  restrictInput: true,
+			accepted: 
+				function (event, keyboard, el) {
+					var dataToSend = {}
+
+					if (validate.single(el.value, {numericality: {lessThan: 150}})) {
+						el.value = "0.00";
+						showInvalidSetpoint();
+					} else {
+						hideInvalidSetpoint();
+						dataToSend[el.id] =  el.value;
+						$.ajax({
+							url: "update",
+							type: "POST",
+							dataType: "json",
+							data: dataToSend,
+							timeout: 4000,
+							error: function() {
+									el.value = "0.00";
+									showCommError();	
+								},
+							success: hideCommError
+						});
+					}
+				}
+	 });
 
 	setInterval(refreshSettings, interval);
+});
 
-	});
+function showInvalidSetpoint() {
+	$("#invalidFeederSetpoint").show();
+}
+
+function hideInvalidSetpoint() {
+	$("#invalidFeederSetpoint").hide();
+}
+
+function showCommError() {
+	$("#communicationError").show();
+}
+
+function hideCommError() {
+	$("#communicationError").hide();
+}
 
 function setButton(button, value) {
 	if (value == "true") {
@@ -222,18 +263,16 @@ function refreshSettings() {
 				setButton($("#feeder1_on"), data.feeder1_on);
 				setButton($("#feeder2_on"), data.feeder2_on);
 				setButton($("#feeder3_on"), data.feeder3_on);
-
 				setButton($("#heater1_on"), data.heater1_on);
 				setButton($("#heater2_on"), data.heater2_on);
 				setButton($("#heater3_on"), data.heater3_on);
 
-				$("#feeder1_setpoint").innerHTML = data.feeder1_setpoint;
-				$("#feeder2_setpoint").innerHTML = data.feeder2_setpoint;
-				$("#feeder3_setpoint").innerHTML = data.feeder3_setpoint;
-
-				$("#heater1_setpoint").innerHTML = data.heater1_setpoint;
-				$("#heater2_setpoint").innerHTML = data.heater2_setpoint;
-				$("#heater3_setpoint").innerHTML = data.heater3_setpoint;
+				$("#feeder1_setpoint").val(data.feeder1_setpoint);
+				$("#feeder2_setpoint").val(data.feeder2_setpoint);
+				$("#feeder3_setpoint").val(data.feeder3_setpoint);
+				$("#heater1_setpoint").val(data.heater1_setpoint);
+				$("#heater2_setpoint").val(data.heater2_setpoint);
+				$("#heater3_setpoint").val(data.heater3_setpoint);
 			},
 		dataType: "json",
 		timeout: 5000
@@ -256,7 +295,9 @@ $(document).ready(function(){
 			context: this,
 			success: function(data) {
 					setButton($(this), data[this.id]);
-				}
+					hideCommError();
+				},
+			error: showCommError
 		});
 	});
 });

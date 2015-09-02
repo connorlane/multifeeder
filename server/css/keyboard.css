@@ -1,7 +1,7 @@
 /* keyboard - jQuery UI Widget */
-.ui-keyboard { padding: .3em; position: fixed; left: 0px; top: auto; bottom: 0px; width: 100%; z-index: 16000; }
+.ui-keyboard { font-size: 1em; padding: .3em; position: fixed; left: 0px; top: auto; bottom: 0px; width: 100%; z-index: 16000; }
 .ui-keyboard-has-focus { z-index: 16001; }
-.ui-keyboard div { font-size: 1.1em; }
+.ui-keyboard div { font-size: 3em; }
 .ui-keyboard-button { height: 2em; min-width: 2em; margin: .1em; cursor: pointer; overflow: hidden; line-height: 2em; -moz-user-focus: ignore; }
 .ui-keyboard-button span { padding: 0; margin: 0; white-space:nowrap; display: inline-block; }
 .ui-keyboard-button-endrow { clear: left; }
@@ -128,10 +128,9 @@ button.ui-keyboard-extender span {
 
 /* Media Queries (optimized for jQuery UI themes; may be slightly off in jQuery Mobile themes) */
 /* 240 x 320 (small phone)  */
-@media all and (max-width: 319px) {
+/*@media all and (max-width: 319px) {
 	.ui-keyboard div { font-size: 9px; }
 	.ui-keyboard .ui-keyboard-input { font-size: 12px; }
-	/* I don't own an iPhone so I have no idea how small this really is... is it even clickable with your finger? */
 	.ui-body .ui-btn { margin: 0; font-size: 9px; }
 	.ui-body .ui-keyboard-button { width: 1.8em; height: 2.5em; }
 	.ui-body .ui-keyboard-widekey { width: 4em; }
@@ -139,11 +138,9 @@ button.ui-keyboard-extender span {
 	.ui-body .ui-btn-inner { height: 2.5em; padding: 0.3em 0; }
 }
 
-/* 320 x 480 (iPhone)  */
 @media all and (min-width: 320px) and (max-width: 479px) {
 	.ui-keyboard div { font-size: 9px; }
 	.ui-keyboard .ui-keyboard-input { font-size: 14px; }
-	/* I don't own an iPhone so I have no idea how small this really is... is it even clickable with your finger? */
 	.ui-body .ui-btn { margin: 0; font-size: 11px; }
 	.ui-body .ui-keyboard-button { width: 1.8em; height: 3em; }
 	.ui-body .ui-keyboard-widekey { width: 4.5em; }
@@ -151,12 +148,11 @@ button.ui-keyboard-extender span {
 	.ui-body .ui-btn-inner { height: 3em; padding: 0.7em 0; }
 }
 
-/* 480 x 640 (small tablet) */
 @media all and (min-width: 480px) and (max-width: 767px) {
 	.ui-keyboard div { font-size: 13px; }
 	.ui-keyboard .ui-keyboard-input { font-size: 14px; }
 	.ui-body .ui-btn { margin: 0; font-size: 10px; }
 	.ui-body .ui-keyboard-button { height: 2.5em; }
 	.ui-body .ui-btn-inner { height: 2.5em; padding: 0.5em 0; }
-}
+}*/
 

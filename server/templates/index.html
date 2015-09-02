@@ -25,7 +25,30 @@
 
         <script type="text/javascript" src="js/feeder.js"></script>
 
+        <script type="text/javascript" src="js/validate.min.js"></script>
+
 		 <style>
+			.nav-tabs > li {
+				float: none;
+				display: inline-block;
+			}
+
+			.nav-tabs {
+				text-align: center;
+				margin: 5px;
+			}
+			
+			.tab-pane {
+				margin: auto;
+				display: inline-block;
+				width: 440px;
+			}
+	
+			.tab-content {
+				margin: auto;
+				float: none;
+			}
+
 			.hopper-label {
 				margin-left: 30px;
 			}
@@ -40,19 +63,19 @@
 				margin-top: 5px;
 				margin-bottom: 15px;
 				font-size: 15px;
-				width: 200px;
+				width: 190px;
 				height: 50px;
 			}
 			
 			.keyboard-wrapper {
 				float: right;
 				font-size: 30px;
-				width: 200px;
+				width: 190px;
 				height: 80px;
 			}
 
 			.hopper-section {
-				width: 460px;
+				width: 440px;
 				background: #E6E6E6;
 				display: inline-block;
 				padding: 10px;
@@ -67,6 +90,10 @@
 				font-size: 30px;
 				width: 200px;
 				height: 80px;
+			}
+		
+			.center {
+				text-align: center;
 			}
 
 		</style>
@@ -83,6 +110,12 @@
   </ul>
 
   <div class="tab-content">
+	<div id="invalidFeederSetpoint" class="alert alert-danger collapse center" >
+		<strong>Invalid feeder setpoint!</strong>
+	</div>
+	<div id="communicationError" class="alert alert-danger collapse center" >
+		<strong>Problem communicating with server. Try rebooting machine.</strong>
+	</div>
     <div id="feeders" class="tab-pane fade in active">
 		<h4 class="hopper-label"> Feeder One </h4>
 		<div class="hopper-section">
@@ -96,7 +129,7 @@
 					<button id="feeder1_on" class="btn btn-danger btn-md powerbuttons" value="false">OFF</button>
 				</div>
 				<div class=keyboard-wrapper>
-					<input id="feeder1_setpoint" class="temp-keyboard" type="textarea" maxlength="3"/>
+					<input id="feeder1_setpoint" class="temp-keyboard" type="textarea" maxlength="3" data-validate="url"/>
 				</div>
 			</div>
 		</div>
