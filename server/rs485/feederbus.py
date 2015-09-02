@@ -1,11 +1,17 @@
-import serial, rs485
+import serial, sl4824, minimalmodbus, rs485
 
-feederbus = rs485.RS485(port='/dev/ttyUSB0', baudrate=9600, timeout=1, parity=serial.PARITY_EVEN, stopbits=serial.STOPBITS_ONE, bytesize=serial.SEVENBITS);
+class Feederbus ( object ):
+	def __init__(self, port):
 
-#heater1 = sl4824.sl4824(, 4)
-#heater1.mode = minimalmodbus.MODE_ASCII
-#heater1.debug = True
+		self.heaters = [
+			sl4824.sl4824(port, 4), 
+			sl4824.sl4824(port, 5),
+			sl4824.sl4824(port, 6)
+		]
 
-#print heater1.write_register(0x1001, 1400)
+		## DEBUG
+		for heater in self.heaters:
+			heater.debug = True			
 
- 
+		rs485.setupRS485(self.heaters[0].serial, 48)
+
