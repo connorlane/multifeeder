@@ -3,7 +3,7 @@ import serial, sl4824, minimalmodbus, rs485
 class Feederbus ( object ):
 	def __init__(self, port):
 		bus = rs485.RS485(
-			48,
+			49,
 			port,
 			baudrate = 9600,
 			bytesize = serial.SEVENBITS,
