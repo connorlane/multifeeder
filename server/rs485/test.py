@@ -2,9 +2,7 @@ import rs485, minimalmodbus, feederbus
 
 bus = feederbus.Feederbus('/dev/ttyO1')
 
-try:
-	bus.heaters[0].setPointValue = 300
-except:
-	pass
+for servo in bus.servos:
+	print "ID: " + str(servo.servoId)
 
-bus.heaters[1].setPointValue = 20
+#print bus.heaters[0].setPointValue
