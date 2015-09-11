@@ -1,6 +1,7 @@
 import minimalmodbus, serial
 
 class sl4824( minimalmodbus.Instrument, object ):
+	PROCESSVALUE_REGISTER = 0x1000
 	SETPOINTVALUE_REGISTER = 0x1001
 	RUNSTOP_REGISTER = 0x0814
 
@@ -33,3 +34,11 @@ class sl4824( minimalmodbus.Instrument, object ):
 	@runStop.setter
 	def runStop(self, value):
 		 self.write_bit(self.RUNSTOP_REGISTER, 1 if value else 0)
+
+	@property
+	def processValue(self):
+		pv = self.read_register(self.PROCESSVALUE_REGISTER)
+		if pv != 0x8002 and pv != 0x8003 and pv != 0x8004 and pv != 0x8006 and pv != 0x8007:
+			return pv * 0.1
+		else:
+			return 0

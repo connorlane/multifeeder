@@ -1,4 +1,5 @@
-import serial, sl4824, minimalmodbus, rs485, tsta
+import serial
+from drivers import sl4824, minimalmodbus, rs485, tsta
 
 class Feederbus ( object ):
 	def __init__(self, port):
@@ -16,19 +17,12 @@ class Feederbus ( object ):
 			tsta.TSTA(bus, 3)
 		]
 
-		## DEBUG ##	
-		for servo in self.servos:
-			servo.debug = True
+		self.heaters = [
+			sl4824.sl4824(bus, 4), 
+			sl4824.sl4824(bus, 5),
+			sl4824.sl4824(bus, 6)
+		]
 
-		#self.heaters = [
-		#	sl4824.sl4824(bus, 4), 
-		#	sl4824.sl4824(bus, 5),
-		#	sl4824.sl4824(bus, 6)
-		#]
-
-		### DEBUG ##
-		#for heater in self.heaters:
-		#	heater.debug = True			
-
-
+		for heater in self.heaters:
+			heater.debug = True
 

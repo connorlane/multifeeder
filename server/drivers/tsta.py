@@ -2,6 +2,7 @@ import minimalmodbus, serial
 
 class TSTA( minimalmodbus.Instrument, object ):
 	SERVO_ID_REGISTER = 0x0024
+	CONTROL_MODE_REGISTER = 0x0001
 
 	def __init__(self, port, slaveaddress):
 		minimalmodbus.Instrument.__init__(self, port, slaveaddress)
@@ -16,3 +17,23 @@ class TSTA( minimalmodbus.Instrument, object ):
 	@property
 	def servoId(self):
 		return self.read_register(self.SERVO_ID_REGISTER)
+
+	## Control Mode ##
+	class ControlMode(object):
+		TORQUE = 0,
+		SPEED = 1,
+		EXTERNAL_PULSE = 2,
+		POSITION_SPEED = 3,
+		SPEED_TORQUE = 4,
+		POSITION_TORQUE = 5,
+		INTERNAL_POSITION = 6
+
+	@property
+	def controlMode(self):
+		return self.read_register(self.CONTROL_MODE_REGISTER)
+
+	@controlMode.setter
+	def controlMode(self, value):
+		self.write_register(self.CONTROL_MODE_REGISTER, value)
+
+	

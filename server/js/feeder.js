@@ -1,7 +1,5 @@
  document.addEventListener("DOMContentLoaded", function(event) {
-	  var feeder1_gauge = new JustGage({
-			id: "feeder1_value",
-			title: "Steel",
+          var feederGauge = {
 			titleFontColor: "#1A1A1A",
 			titleMinFontSize: "15px",			
 			label: "RPM", value: 25,
@@ -24,70 +22,14 @@
 			  lo : 20,
 			  hi : 30
 			}],
-			counter: true
-	  });
+			counter: false,
+			startAnimationTime: 1,
+			startAnimationType: "linear",
+			refreshAnimationTime: 1,
+			refreshAnimationType: "linear"  
+	  };
 
-	  var feeder2_gauge = new JustGage({
-			id: "feeder2_value",
-			title: "Ti-64",
-			titleFontColor: "#1A1A1A",
-			titleMinFontSize: "15px",			
-			label: "RPM",
-			value: 25,
-			min: 0,
-			max: 30,
-			donut: false,
-			decimals: 2,
-			gaugeWidthScale: 0.5,
-			levelColorsGradient: false,
-			customSectors: [{
-			  color : "#CC0000",
-			  lo : 0,
-			  hi : 0.5
-			},{
-			  color : "#00CC00",
-			  lo : 0.5,
-			  hi : 20
-			}, {
-			  color : "#CC0000",
-			  lo : 20,
-			  hi : 30
-			}],
-			counter: true
-	  });
-
-	  var feeder3_gauge = new JustGage({
-			id: "feeder3_value",
-			title: "Stainless",
-			titleFontColor: "#1A1A1A",
-			titleMinFontSize: "15px",			
-			label: "RPM",
-			value: 25,
-			min: 0,
-			max: 30,
-			donut: false,
-			decimals: 2,
-			gaugeWidthScale: 0.5,
-			levelColorsGradient: false,
-			customSectors: [{
-			  color : "#CC0000",
-			  lo : 0,
-			  hi : 0.5
-			},{
-			  color : "#00CC00",
-			  lo : 0.5,
-			  hi : 20
-			}, {
-			  color : "#CC0000",
-			  lo : 20,
-			  hi : 30
-			}],
-			counter: true
-	  });
-
-	  var heater1_gauge = new JustGage({
-			id: "heater1_value",
-			title: "Steel",
+	var heaterGauge = {
 			titleFontColor: "#1A1A1A",
 			titleMinFontSize: "15px",			
 			label: "Degrees Celcius",
@@ -110,64 +52,20 @@
 			  hi : 200
 			}],
 			levelColorsGradient: false,
-			counter: true
-	  });
+			counter: false,
+			startAnimationTime: 1,
+			startAnimationType: "linear",
+			refreshAnimationTime: 1,
+			refreshAnimationType: "linear"  
+	  };
 
-	  var heater2_gauge = new JustGage({
-			id: "heater2_value",
-			title: "Ti-64",
-			titleFontColor: "#1A1A1A",
-			titleMinFontSize: "15px",			
-			label: "Degrees Celcius",
-			value: 25,
-			min: 0,
-			max: 200,
-			donut: false,
-			gaugeWidthScale: 0.5,
-			customSectors: [{
-			  color : "#00CC00",
-			  lo : 0,
-			  hi : 50
-			},{
-			  color : "#CCCC00",
-			  lo : 50,
-			  hi : 150
-			}, {
-			  color : "#CC0000",
-			  lo : 150,
-			  hi : 200
-			}],
-		levelColorsGradient: false,
-			counter: true
-	  });
+	var feeder1_gauge = new JustGage($.extend({}, feederGauge, {id: "feeder1_value", title: "Steel"}));
+	var feeder2_gauge = new JustGage($.extend({}, feederGauge, {id: "feeder2_value", title: "Ti-64"}));
+	var feeder3_gauge = new JustGage($.extend({}, feederGauge, {id: "feeder3_value", title: "Stainless"}));
 
-	  var heater3_gauge = new JustGage({
-			id: "heater3_value",
-			title: "Stainless",
-			titleFontColor: "#1A1A1A",
-			titleMinFontSize: "15px",			
-			label: "Degrees Celcius",
-			value: 25,
-			min: 0,
-			max: 200,
-			donut: false,
-			gaugeWidthScale: 0.5,
-			customSectors: [{
-			  color : "#00CC00",
-			  lo : 0,
-			  hi : 50
-			},{
-			  color : "#CCCC00",
-			  lo : 50,
-			  hi : 150
-			}, {
-			  color : "#CC0000",
-			  lo : 150,
-			  hi : 200
-			}],
-	levelColorsGradient: false,
-			counter: true
-	  });
+	var heater1_gauge = new JustGage($.extend({}, heaterGauge, {id: "heater1_value", title: "Steel"}));
+	var heater2_gauge = new JustGage($.extend({}, heaterGauge, {id: "heater2_value", title: "Ti-64"}));
+	var heater3_gauge = new JustGage($.extend({}, heaterGauge, {id: "heater3_value", title: "Stainless"}));
 
 	var interval = 1000
 	setInterval(function poll(){
@@ -189,42 +87,61 @@
 		});
 	}, interval);
 
-	$('.temp-keyboard')
+	$('.feeder-keyboard')
         .keyboard({
-			maxLength: "4",
-        layout: 'custom',
-        customLayout: {
-            'default': ['7 8 9', '4 5 6', '1 2 3', '0 . {b}', '{accept} {cancel}']
-        },
-		  restrictInput: true,
-			accepted: 
-				function (event, keyboard, el) {
-					var dataToSend = {}
+		maxLength: "4",
+		layout: 'custom',
+		customLayout: {
+		    'default': ['7 8 9', '4 5 6', '1 2 3', '0 . {b}', '{accept} {cancel}']
+		},
+		restrictInput: true,
+		accepted:
+		function (event, keyboard, el) {
+			checkAndPost(el, {lessThan: 30});
+		}
+	});
 
-					if (validate.single(el.value, {numericality: {lessThan: 150}})) {
-						el.value = "0.00";
-						showInvalidSetpoint();
-					} else {
-						hideInvalidSetpoint();
-						dataToSend[el.id] =  el.value;
-						$.ajax({
-							url: "update",
-							type: "POST",
-							dataType: "json",
-							data: dataToSend,
-							timeout: 4000,
-							error: function() {
-									el.value = "0.00";
-									showCommError();	
-								},
-							success: hideCommError
-						});
-					}
-				}
-	 });
+	$('.heater-keyboard')
+        .keyboard({
+		maxLength: "4",
+		layout: 'custom',
+		customLayout: {
+		    'default': ['7 8 9', '4 5 6', '1 2 3', '0 . {b}', '{accept} {cancel}']
+		},
+		restrictInput: true,
+		accepted:
+		function (event, keyboard, el) {
+			checkAndPost(el, {lessThan: 150});
+		}
+	});
 
 	setInterval(refreshSettings, interval);
 });
+
+function checkAndPost(el, specs)
+{
+	var dataToSend = {}
+	if (validate.single(el.value, {numericality: specs})) {
+		el.value = "0.00";
+		showInvalidSetpoint();
+	} else {
+		hideInvalidSetpoint();
+		el.value = parseFloat(el.value).toFixed(1);
+		dataToSend[el.id] =  el.value;
+		$.ajax({
+			url: "update",
+			type: "POST",
+			dataType: "json",
+			data: dataToSend,
+			timeout: 4000,
+			error: function() {
+				el.value = "0.00";
+				showCommError();	
+			},
+			success: hideCommError
+		});
+	}
+}
 
 function showInvalidSetpoint() {
 	$("#invalidFeederSetpoint").show();
