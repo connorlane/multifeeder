@@ -67,11 +67,21 @@
 				height: 50px;
 			}
 			
-			.keyboard-wrapper {
+			.input-wrapper {
 				float: right;
 				font-size: 30px;
 				width: 190px;
 				height: 80px;
+			}
+
+			.feeder-keyboard-wrapper {
+				width: 130px;
+				display: inline-block;
+			}
+
+			.heater-keyboard-wrapper {
+				width: 150px;
+				display: inline-block;
 			}
 
 			.hopper-section {
@@ -86,14 +96,20 @@
 			}
 
 			.feeder-keyboard, .heater-keyboard {
+				width: 100%;
 				text-align: center;
 				font-size: 30px;
-				width: 200px;
 				height: 80px;
 			}
 
 			.center {
 				text-align: center;
+			}
+
+			.unit-label {
+				font-size: 20px;
+				text-align: center;
+				display: inline-block;
 			}
 
 		</style>
@@ -128,8 +144,11 @@
 				<div>
 					<button id="feeder1_on" class="btn btn-danger btn-md powerbuttons" value="false">OFF</button>
 				</div>
-				<div class=keyboard-wrapper>
-					<input id="feeder1_setpoint" class="feeder-keyboard" type="textarea" maxlength="3" data-validate="url"/>
+				<div class="input-wrapper">
+					<div class=feeder-keyboard-wrapper>
+						<input id="feeder1_setpoint" class="feeder-keyboard" type="textarea" maxlength="3" data-validate="url"/>
+					</div>
+					<div class="unit-label">cm&sup3;/s</div>
 				</div>
 			</div>
 		</div>
@@ -145,8 +164,13 @@
 				<div>
 					<button id="feeder2_on" class="btn btn-danger btn-md powerbuttons" value="false">OFF</button>
 				</div>
-				<div class="keyboard-wrapper">
-					<input id="feeder2_setpoint" class="feeder-keyboard" type="textarea" maxlength="3"/>
+				<div class="input-wrapper">
+					<div class="feeder-keyboard-wrapper">
+						<input id="feeder2_setpoint" class="feeder-keyboard" type="textarea" maxlength="3"/>
+					</div>
+					<div class="unit-label">
+						<p> cm&sup3;/s</p>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -162,8 +186,11 @@
 				<div>
 					<button id="feeder3_on" class="btn btn-danger btn-md powerbuttons" value="false">OFF</button>
 				</div>
-				<div class="keyboard-wrapper">
-					<input id="feeder3_setpoint" class="feeder-keyboard" type="textarea" maxlength="3"/>
+				<div class="input-wrapper">
+					<div class="feeder-keyboard-wrapper">
+						<input id="feeder3_setpoint" class="feeder-keyboard" type="textarea" maxlength="3"/>
+					</div>
+					<p class="unit-label"> cm&sup3;/s</p>
 				</div>
 			</div>
 		</div>
@@ -181,8 +208,11 @@
 				<div>
 					<button id="heater1_on" class="btn btn-danger btn-md powerbuttons" value="false">OFF</button>
 				</div>
-				<div class="keyboard-wrapper">
-					<input id="heater1_setpoint" class="heater-keyboard" type="textarea" maxlength="3"/>
+				<div class="input-wrapper">
+					<div class="heater-keyboard-wrapper">
+						<input id="heater1_setpoint" class="heater-keyboard" type="textarea" maxlength="3"/>
+					</div>
+					<p class="unit-label"> &deg;C</p>
 				</div>
 			</div>
 		</div>
@@ -198,8 +228,11 @@
 				<div>
 					<button id="heater2_on" class="btn btn-danger btn-md powerbuttons" value="false">OFF</button>
 				</div>
-				<div class="keyboard-wrapper">
-					<input id="heater2_setpoint" class="heater-keyboard" type="textarea" maxlength="3"/>
+				<div class="input-wrapper">
+					<div class="heater-keyboard-wrapper">
+						<input id="heater2_setpoint" class="heater-keyboard" type="textarea" maxlength="3"/>
+					</div>
+					<p class="unit-label"> &deg;C</p>
 				</div>
 			</div>
 		</div>
@@ -215,8 +248,11 @@
 				<div>
 					<button id="heater3_on" class="btn btn-danger btn-md powerbuttons" value="false">OFF</button>
 				</div>
-				<div class="keyboard-wrapper">
-					<input id="heater3_setpoint" class="heater-keyboard" type="textarea" maxlength="3"/>
+				<div class="input-wrapper">
+					<div class="heater-keyboard-wrapper">
+						<input id="heater3_setpoint" class="heater-keyboard" type="textarea" maxlength="3"/>
+					</div>
+					<p class="unit-label"> &deg;C</p>
 				</div>
 			</div>
 		</div>
