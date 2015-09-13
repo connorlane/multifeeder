@@ -2,9 +2,10 @@
           var feederGauge = {
 			titleFontColor: "#1A1A1A",
 			titleMinFontSize: "15px",			
-			label: "RPM", value: 25,
+			label: "cm^3/s", 
+			value: 0,
 			min: 0,
-			max: 30,
+			max: 300,
 			donut: false,
 			decimals: 2,
 			gaugeWidthScale: 0.5,
@@ -12,15 +13,15 @@
 			customSectors: [{
 			  color : "#CC0000",
 			  lo : 0,
-			  hi : 0.5
+			  hi : 5
 			},{
 			  color : "#00CC00",
-			  lo : 0.5,
-			  hi : 20
+			  lo : 5,
+			  hi : 200
 			}, {
 			  color : "#CC0000",
-			  lo : 20,
-			  hi : 30
+			  lo : 200,
+			  hi : 300
 			}],
 			counter: false,
 			startAnimationTime: 1,
@@ -82,7 +83,7 @@
 					hideCommError();
 				}, 
 			dataType: "json", 
-			timeout: interval,
+			timeout: 4000,
 			error: showCommError
 		});
 	}, interval);
@@ -97,7 +98,7 @@
 		restrictInput: true,
 		accepted:
 		function (event, keyboard, el) {
-			checkAndPost(el, {lessThan: 30});
+			checkAndPost(el, {lessThan: 300});
 		}
 	});
 
@@ -192,7 +193,7 @@ function refreshSettings() {
 				$("#heater3_setpoint").val(data.heater3_setpoint);
 			},
 		dataType: "json",
-		timeout: 5000
+		timeout: 4000
 	});
 }
 
@@ -201,7 +202,7 @@ $(document).ready(function(){
 		var newButtonCommand = (this.value == "true") ? "false" : "true";
 
 		var dataToSend = {}
-		dataToSend[this.id] =  newButtonCommand;
+		dataToSend[this.id] = newButtonCommand;
 
 		$.ajax({
 			url: "update",

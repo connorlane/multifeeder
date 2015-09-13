@@ -7,11 +7,11 @@ class TSTA( minimalmodbus.Instrument, object ):
 
 	def __init__(self, port, slaveaddress):
 		minimalmodbus.Instrument.__init__(self, port, slaveaddress)
-		#self.serial.bytesize = serial.SEVENBITS
-		#self.serial.baudrate = 9600
-		#self.serial.timeout = 1
-		#self.serial.parity = serial.PARITY_NONE
-		#self.serial.stopbits = serial.STOPBITS_TWO
+		self.serial.bytesize = serial.SEVENBITS
+		self.serial.baudrate = 9600
+		self.serial.timeout = 1
+		self.serial.parity = serial.PARITY_NONE
+		self.serial.stopbits = serial.STOPBITS_TWO
 		self.mode = minimalmodbus.MODE_ASCII
 
 	## servoId - Get the current servo id ##

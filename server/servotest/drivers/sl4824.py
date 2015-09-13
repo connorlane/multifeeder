@@ -7,11 +7,11 @@ class sl4824( minimalmodbus.Instrument, object ):
 
 	def __init__(self, port, slaveaddress):
 		minimalmodbus.Instrument.__init__(self, port, slaveaddress)
-		#self.serial.bytesize = serial.SEVENBITS
-		#self.serial.baudrate = 9600
-		#self.serial.timeout = 1.0
-		#self.serial.parity = serial.PARITY_EVEN
-		#self.serial.stopbits = serial.STOPBITS_ONE
+		self.serial.bytesize = serial.SEVENBITS
+		self.serial.baudrate = 9600
+		self.serial.timeout = 1
+		self.serial.parity = serial.PARITY_EVEN
+		self.serial.stopbits = serial.STOPBITS_ONE
 		self.mode = minimalmodbus.MODE_ASCII
 
 

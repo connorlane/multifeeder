@@ -1,7 +1,9 @@
 import serial
-from drivers import sl4824, minimalmodbus, rs485, tsta
+from drivers import sl4824, minimalmodbus, rs485, tsta, beaglebonegpio
 
 class Feederbus ( object ):
+	SERVO_ENABLE_PIN_NUMBER = 27
+
 	def __init__(self, port):
 		bus = rs485.RS485(
 			49,
@@ -23,6 +25,11 @@ class Feederbus ( object ):
 			sl4824.sl4824(bus, 6)
 		]
 
-		for heater in self.heaters:
-			heater.debug = True
+		## Uncomment for debug messages on the RS485 bus ##
+		#for heater in self.heaters:
+		#	heater.debug = True
 
+		#for servo in self.servos:
+		#	servo.debug = True
+
+		self.servoEnablePin = beaglebonegpio.BeagleBoneGPIO(Feederbus.SERVO_ENABLE_PIN_NUMBER)

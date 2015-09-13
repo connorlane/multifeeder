@@ -2,8 +2,12 @@ import web
 import random
 import json
 import feederbus
+import time
+import threading
+import atexit
 
 bus = feederbus.Feederbus('/dev/ttyO1')
+rs485Lock = threading.Lock()
 
 urls = (
     '/', 'index',
@@ -43,16 +47,18 @@ class update:
 	
 		changed = dict()
 		for key in data:
-			if key in self.settings:
-				if data[key] != self.settings[key]:
-					self.settings[key] = changed[key] = data[key]
-	
+			if key in update.settings:
+				if data[key] != update.settings[key]:
+					changed[key] = data[key]
+
+		#try:
+		rs485Lock.acquire()
 		if 'feeder1_on' in changed:
-			bus.feeders[0].runStop = True if changed['feeder1_on'] == 'true' else False
+			bus.servos[0].runStop = True if changed['feeder1_on'] == 'true' else False
 		if 'feeder2_on' in changed:
-			bus.feeders[1].runStop = True if changed['feeder2_on'] == 'true' else False
+			bus.servos[1].runStop = True if changed['feeder2_on'] == 'true' else False
 		if 'feeder3_on' in changed:
-			bus.feeders[2].runStop = True if changed['feeder3_on'] == 'true' else False
+			bus.servos[2].runStop = True if changed['feeder3_on'] == 'true' else False
 		
 		if 'heater1_on' in changed:
 			bus.heaters[0].runStop = True if changed['heater1_on'] == 'true' else False
@@ -62,11 +68,11 @@ class update:
 			bus.heaters[2].runStop = True if changed['heater3_on'] == 'true' else False
 
 		if 'feeder1_setpoint' in changed:
-			bus.feeders[0].setPointValue = float(changed['feeder1_setpoint'])
+			bus.servos[0].speedCommand = float(changed['feeder1_setpoint'])
 		if 'feeder2_setpoint' in changed:
-			bus.feeders[1].setPointValue = float(changed['feeder1_setpoint'])
+			bus.servos[1].speedCommand = float(changed['feeder2_setpoint'])
 		if 'feeder3_setpoint' in changed:
-			bus.feeders[2].setPointValue = float(changed['feeder1_setpoint'])
+			bus.servos[2].speedCommand = float(changed['feeder3_setpoint'])
 		
 		if 'heater1_setpoint' in changed:
 			bus.heaters[0].setPointValue = float(changed['heater1_setpoint'])
@@ -74,24 +80,49 @@ class update:
 			bus.heaters[1].setPointValue = float(changed['heater2_setpoint'])
 		if 'heater3_setpoint' in changed:
 			bus.heaters[2].setPointValue = float(changed['heater3_setpoint'])
+		rs485Lock.release()
+
+		for key in changed:
+			update.settings[key] = changed[key]
+
+		print update.settings
 
 		return json.dumps(changed)
 
+		#except:
+			#print "Houston, we have a problem"
+			#return web.internalerror("Error writing to internal bus")
+
 	def GET(self):
-		return json.dumps(self.settings)
+		return json.dumps(update.settings)
+
+data_dataCache = {}
+data_timestamp = 0.0
 
 class data:
+	dataCache = {}
+	timestamp = 0.0
+
+	DATA_TIMEOUT = 0.75
+
+	def _refreshDataCache(self):
+		if data.timestamp < time.time() - self.DATA_TIMEOUT:
+			rs485Lock.acquire()
+			data.dataCache = {
+				'heater1': bus.heaters[0].processValue,
+				'heater2': bus.heaters[1].processValue,
+				'heater3': bus.heaters[2].processValue,
+				'wheel1': bus.servos[0].actualSpeed,
+				'wheel2': bus.servos[1].actualSpeed,
+				'wheel3': bus.servos[2].actualSpeed
+			}	
+			rs485Lock.release()
+			data.timestamp = time.time()
+
 	def GET(self):
-		data = {
-			'heater1': bus.heaters[0].processValue,
-			'heater2': bus.heaters[1].processValue,
-			'heater3': bus.heaters[2].processValue,
-			'wheel1': random.randint(0, 30),
-			'wheel2': random.randint(0, 30),
-			'wheel3': random.randint(0, 30)
-		}
-		
-		return json.dumps(data)			
+		self._refreshDataCache()
+
+		return json.dumps(data.dataCache)			
 
 class index:
 	def GET(self):
@@ -100,15 +131,21 @@ class index:
 def setDefaults():
 	for heater in bus.heaters:
 		heater.onOff = False
-		heater.setPointValue = 0
+		heater.setPointValue = 0.0
 	
-	#for servo in bus.servo:
-	##	servo.onOff = False
-	#	servo.setPointValue = 0
-		
+	for servo in bus.servos:
+		servo.speedCommand = 0.0
+	
+@atexit.register
+def cleanup_cleanup_everybody_do_your_share():
+	bus.servoEnablePin.write(0)
+
+	setDefaults()
 
 if __name__ == "__main__":
 	setDefaults()	
+
+	bus.servoEnablePin.write(1)
 	
 	app = web.application(urls, globals())
 	app.run()
