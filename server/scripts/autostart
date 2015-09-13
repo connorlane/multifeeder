@@ -1,0 +1,4 @@
+export GOOGLE_API_KEY="no"
+export GOOGLE_DEFAULT_CLIENT_ID="no"
+export GOOGLE_DEFAULT_CLIENT_SECRET="no"
+chromium --noerrdialogs --kiosk --incognito -disk-cache-dir=/dev/null "http://localhost:8080/"

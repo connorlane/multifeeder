@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import web
 import random
 import json
@@ -5,6 +7,8 @@ import feederbus
 import time
 import threading
 import atexit
+
+DATA_DIRECTORY = '/srv/multifeeder_server'
 
 bus = feederbus.Feederbus('/dev/ttyO1')
 rs485Lock = threading.Lock()
@@ -16,12 +20,14 @@ urls = (
 	 '/update', 'update'
 )
 
-render = web.template.render('templates')
+render = web.template.render('/srv/multifeeder_server/templates')
 
 class static:
+
     def GET(self, media, file):
+	p = DATA_DIRECTORY+'/'+media+'/'+file
         try:
-		f = open(media+'/'+file, 'r')
+		f = open(p, 'r')
 		return f.read()
         except:
 		raise web.notfound()
