@@ -1,0 +1,266 @@
+
+    <!DOCTYPE html>
+
+    <html>
+
+    <head>
+
+        <meta charset="utf-8">
+
+        <title>LAMP Powder Feeder</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+		  <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+        <link rel="stylesheet" type="text/css" href="css/keyboard.css">
+		 <script type="text/javascript" src="js/jquery.keyboard.js"></script>
+
+		 <script type="text/javascript" src="js/raphael-2.1.4.min.js"></script>
+		 <script type="text/javascript" src="js/justgage-1.1.0.min.js"></script>
+
+        <script type="text/javascript" src="js/feeder.js"></script>
+
+        <script type="text/javascript" src="js/validate.min.js"></script>
+
+		 <style>
+			.nav-tabs > li {
+				font-size: 30px;
+				float: none;
+				display: inline-block;
+			}
+
+			.nav-tabs {
+				text-align: center;
+				margin: 5px;
+			}
+			
+			.tab-pane {
+				margin: auto;
+				display: inline-block;
+				width: 440px;
+			}
+	
+			.tab-content {
+				margin: auto;
+				float: none;
+			}
+
+			.hopper-label {
+				margin-left: 30px;
+			}
+
+			 .gauge {
+				width: 150px;
+				height: 150px;
+			 }
+			
+			.powerbuttons {
+				float: right;
+				margin-top: 5px;
+				margin-bottom: 15px;
+				font-size: 15px;
+				width: 190px;
+				height: 50px;
+			}
+			
+			.input-wrapper {
+				float: right;
+				font-size: 30px;
+				width: 190px;
+				height: 80px;
+			}
+
+			.feeder-keyboard-wrapper {
+				width: 125px;
+				display: inline-block;
+			}
+
+			.heater-keyboard-wrapper {
+				width: 150px;
+				display: inline-block;
+			}
+
+			.hopper-section {
+				width: 440px;
+				background: #E6E6E6;
+				display: inline-block;
+				padding: 10px;
+				margin: 5px;
+				 -webkit-border-radius: 4px;
+				 -moz-border-radius: 4px;
+				 border-radius: 4px;
+			}
+
+			.feeder-keyboard, .heater-keyboard {
+				width: 100%;
+				text-align: center;
+				font-size: 30px;
+				height: 80px;
+			}
+
+			.center {
+				text-align: center;
+			}
+
+			.unit-label {
+				font-size: 18px;
+				text-align: center;
+				display: inline-block;
+			}
+
+		</style>
+
+    </head>
+
+    <body>
+
+<div class="container">
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#feeders">Feeders</a></li>
+    <li><a data-toggle="tab" href="#heaters">Heaters</a></li>
+  </ul>
+
+  <div class="tab-content">
+	<div id="invalidFeederSetpoint" class="alert alert-danger collapse center" >
+		<strong>Invalid feeder setpoint!</strong>
+	</div>
+	<div id="communicationError" class="alert alert-danger collapse center" >
+		<strong>Problem communicating with server. Try rebooting machine.</strong>
+	</div>
+    <div id="feeders" class="tab-pane fade in active">
+		<h4 class="hopper-label"> Feeder One </h4>
+		<div class="hopper-section">
+			<div class="col-xs-4">
+				<div class="wrapper">
+					<div id="feeder1_value" class="gauge"></div>
+				</div>
+			</div>
+			<div class="col-xs-8">
+				<div>
+					<button id="feeder1_on" class="btn btn-danger btn-md powerbuttons" value="false">OFF</button>
+				</div>
+				<div class="input-wrapper">
+					<div class=feeder-keyboard-wrapper>
+						<input id="feeder1_setpoint" class="feeder-keyboard" type="textarea" maxlength="3" data-validate="url"/>
+					</div>
+					<div class="unit-label">cm&sup3;/s</div>
+				</div>
+			</div>
+		</div>
+
+		<h4 class="hopper-label"> Feeder Two </h4>
+		<div class="hopper-section">
+			<div class="col-xs-4">
+				<div class="wrapper">
+					<div id="feeder2_value" class="gauge"></div>
+				</div>
+			</div>
+			<div class="col-xs-8">
+				<div>
+					<button id="feeder2_on" class="btn btn-danger btn-md powerbuttons" value="false">OFF</button>
+				</div>
+				<div class="input-wrapper">
+					<div class="feeder-keyboard-wrapper">
+						<input id="feeder2_setpoint" class="feeder-keyboard" type="textarea" maxlength="3"/>
+					</div>
+					<div class="unit-label">
+						<p> cm&sup3;/s</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<h4 class="hopper-label"> Feeder Three </h4>
+		<div class="hopper-section">
+			<div class="col-xs-4">
+				<div class="wrapper">
+					<div id="feeder3_value" class="gauge"></div>
+				</div>
+			</div>
+			<div class="col-xs-8">
+				<div>
+					<button id="feeder3_on" class="btn btn-danger btn-md powerbuttons" value="false">OFF</button>
+				</div>
+				<div class="input-wrapper">
+					<div class="feeder-keyboard-wrapper">
+						<input id="feeder3_setpoint" class="feeder-keyboard" type="textarea" maxlength="3"/>
+					</div>
+					<p class="unit-label"> cm&sup3;/s</p>
+				</div>
+			</div>
+		</div>
+    </div>
+
+    <div id="heaters" class="tab-pane fade">
+		<h4 class="hopper-label"> Heater One </h4>
+		<div class="hopper-section">
+			<div class="col-xs-4">
+				<div class="wrapper">
+					<div id="heater1_value" class="gauge"></div>
+				</div>
+			</div>
+			<div class="col-xs-8">
+				<div>
+					<button id="heater1_on" class="btn btn-danger btn-md powerbuttons" value="false">OFF</button>
+				</div>
+				<div class="input-wrapper">
+					<div class="heater-keyboard-wrapper">
+						<input id="heater1_setpoint" class="heater-keyboard" type="textarea" maxlength="3"/>
+					</div>
+					<p class="unit-label"> &deg;C</p>
+				</div>
+			</div>
+		</div>
+
+		<h4 class="hopper-label"> Heater Two </h4>
+		<div class="hopper-section">
+			<div class="col-xs-4">
+				<div class="wrapper">
+					<div id="heater2_value" class="gauge"></div>
+				</div>
+			</div>
+			<div class="col-xs-8">
+				<div>
+					<button id="heater2_on" class="btn btn-danger btn-md powerbuttons" value="false">OFF</button>
+				</div>
+				<div class="input-wrapper">
+					<div class="heater-keyboard-wrapper">
+						<input id="heater2_setpoint" class="heater-keyboard" type="textarea" maxlength="3"/>
+					</div>
+					<p class="unit-label"> &deg;C</p>
+				</div>
+			</div>
+		</div>
+		
+		<h4 class="hopper-label"> Heater Three </h4>
+		<div class="hopper-section">
+			<div class="col-xs-4">
+				<div class="wrapper">
+					<div id="heater3_value" class="gauge"></div>
+				</div>
+			</div>
+			<div class="col-xs-8">
+				<div>
+					<button id="heater3_on" class="btn btn-danger btn-md powerbuttons" value="false">OFF</button>
+				</div>
+				<div class="input-wrapper">
+					<div class="heater-keyboard-wrapper">
+						<input id="heater3_setpoint" class="heater-keyboard" type="textarea" maxlength="3"/>
+					</div>
+					<p class="unit-label"> &deg;C</p>
+				</div>
+			</div>
+		</div>
+    </div>
+</div>
+
+ </body>
+
+ </html>
+
+

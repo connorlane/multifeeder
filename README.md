@@ -1,2 +1,2 @@
 # multifeeder
-Multiple-Hopper Powder Feeder
+Multiple-Hopper powder feeder controls and firmware.
