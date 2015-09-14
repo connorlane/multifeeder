@@ -5,6 +5,9 @@ class TSTA( minimalmodbus.Instrument, object ):
 	ACTUAL_SPEED_REGISTER = 0x0601
 	SPEED_COMMAND_REGISTER = 0x0201
 
+	speedCommandSetting = 0.0
+	runStopSetting = False
+
 	def __init__(self, port, slaveaddress):
 		minimalmodbus.Instrument.__init__(self, port, slaveaddress)
 		#self.serial.bytesize = serial.SEVENBITS
@@ -34,4 +37,23 @@ class TSTA( minimalmodbus.Instrument, object ):
 
 	@speedCommand.setter
 	def speedCommand(self, value):
-		self.write_register(self.SPEED_COMMAND_REGISTER, value)
+		self.speedCommandSetting = value
+		if self.runStopSetting:
+			self.write_register(self.SPEED_COMMAND_REGISTER, value)
+
+	## runStop - Turn the feeder on or off ##
+
+	@property	
+	def runStop(self):
+		return self.runStopSetting
+
+	@runStop.setter
+	def runStop(self, value):
+		if value:
+			print "Setting to " + str(self.speedCommandSetting)
+			self.write_register(self.SPEED_COMMAND_REGISTER, self.speedCommandSetting)
+		else:
+			self.write_register(self.SPEED_COMMAND_REGISTER, 0.0)
+
+		self.runStopSetting = value
+

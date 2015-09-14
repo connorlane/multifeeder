@@ -91,8 +91,6 @@ class update:
 		for key in changed:
 			update.settings[key] = changed[key]
 
-		print update.settings
-
 		return json.dumps(changed)
 
 		#except:
@@ -141,6 +139,7 @@ def setDefaults():
 	
 	for servo in bus.servos:
 		servo.speedCommand = 0.0
+		servo.onOff = False
 	
 @atexit.register
 def cleanup_cleanup_everybody_do_your_share():
