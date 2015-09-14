@@ -7,6 +7,7 @@ import feederbus
 import time
 import threading
 import atexit
+import signal
 
 DATA_DIRECTORY = '/srv/multifeeder_server'
 
@@ -141,7 +142,7 @@ def setDefaults():
 	
 	for servo in bus.servos:
 		servo.speedCommand = 0.0
-	
+
 @atexit.register
 def cleanup_cleanup_everybody_do_your_share():
 	bus.servoEnablePin.write(0)
@@ -149,6 +150,8 @@ def cleanup_cleanup_everybody_do_your_share():
 	setDefaults()
 
 if __name__ == "__main__":
+	signal.signal(signal.SIGTERM, cleanup_cleanup_everybody_do_your_share)
+
 	setDefaults()	
 
 	bus.servoEnablePin.write(1)
